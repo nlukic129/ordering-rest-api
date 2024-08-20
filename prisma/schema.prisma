@@ -93,14 +93,14 @@ model Category {
 }
 
 model Article {
-  uuid        String @id @default(cuid())
-  name        String @unique
+  uuid        String     @id @default(cuid())
+  name        String     @unique
   description String
   price       Float
   image       String
-
+  code        String
   // Relations
-  categoies Category[]
+  categoies   Category[]
 
   // Meta
   createdAt DateTime @default(now())
