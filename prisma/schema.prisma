@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  uuid String @id @default(cuid())
+  name String @unique
+
+  // Relations
+  users User[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("role")
+}
+
+model User {
+  uuid     String @id @default(cuid())
+  username String @unique
+  password String
+
+  // Relations
+  role      Role       @relation(fields: [roleId], references: [uuid])
+  roleId    String
+  locations Location[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+model Location {
+  uuid        String @id @default(cuid())
+  name        String @unique
+  dispay_name String
+  coordinates Json
+
+  // Relations
+  users  User[]
+  tables Table[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("location")
+}
+
+model Table {
+  uuid String @id @default(cuid())
+  name String @unique
+
+  // Relations
+  location   Location   @relation(fields: [locationId], references: [uuid])
+  locationId String
+  categories Category[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("table")
+}
+
+model Category {
+  uuid String @id @default(cuid())
+  name String @unique
+
+  // Relations
+  tables   Table[]
+  articles Article[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("category")
+}
+
+model Article {
+  uuid        String @id @default(cuid())
+  name        String @unique
+  description String
+  price       Float
+  image       String
+
+  // Relations
+  categoies Category[]
+
+  // Meta
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("article")
+}
