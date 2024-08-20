@@ -1,9 +1,10 @@
 import { Router } from "express";
 
+import authRouter from "./routes/authRouter";
+
 const v1Router = Router();
 
-v1Router.get("/", (req, res) => {
-  res.json("Hello From V1");
-});
+// TODO - Add validation
+v1Router.use("/auth", authRouter);
 
 export default v1Router;
