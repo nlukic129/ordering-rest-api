@@ -45,6 +45,6 @@ export const loginService = async (username: string, password: string) => {
     if (err instanceof Err) {
       throw err;
     }
-    throw new Err("Failed to register user", { statusCode: 500, name: "Database Error", place: "registerService" });
+    throw new Err("Failed to login user", { statusCode: 500, name: "Database Error", place: "loginService" });
   }
 };

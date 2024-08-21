@@ -30,7 +30,7 @@ export const loginController = async (req: Request<{}, {}, TLoginBody>, res: Res
       // secure: nodeEnv === "production", // ! secure: true will only work in production. This is because the cookie will only be set if the connection is secure (HTTPS).
     });
 
-    return res.status(201).json(new ResponseSuccess<{}>("User logged in successfully", {}));
+    return res.status(200).json(new ResponseSuccess<{}>("User logged in successfully.", {}));
   } catch (err) {
     return next(err);
   }

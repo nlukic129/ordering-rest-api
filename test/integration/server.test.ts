@@ -1,5 +1,4 @@
 import request from "supertest";
-
 import app from "../../src/app";
 import { Shutdown } from "../../src/server";
 
