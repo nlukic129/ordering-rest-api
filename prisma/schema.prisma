@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Role {
-  uuid String @id @default(cuid())
+  uuid String @id @default(uuid())
   name String @unique
 
   // Relations
@@ -28,7 +28,7 @@ model Role {
 }
 
 model User {
-  uuid     String @id @default(cuid())
+  uuid     String @id @default(uuid())
   username String @unique
   password String
 
@@ -45,7 +45,7 @@ model User {
 }
 
 model Location {
-  uuid        String @id @default(cuid())
+  uuid        String @id @default(uuid())
   name        String @unique
   dispay_name String
   coordinates Json
@@ -62,7 +62,7 @@ model Location {
 }
 
 model Table {
-  uuid String @id @default(cuid())
+  uuid String @id @default(uuid())
   name String @unique
 
   // Relations
@@ -78,7 +78,7 @@ model Table {
 }
 
 model Category {
-  uuid String @id @default(cuid())
+  uuid String @id @default(uuid())
   name String @unique
 
   // Relations
@@ -93,7 +93,7 @@ model Category {
 }
 
 model Article {
-  uuid        String     @id @default(cuid())
+  uuid        String     @id @default(uuid())
   name        String     @unique
   description String
   price       Float
