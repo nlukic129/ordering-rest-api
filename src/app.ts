@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import v1Router from "./api/v1/v1";
 import { loggingHandler } from "./middleware/loggingHandler";
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
+app.use(cookieParser());
 
 app.use(bodyParser.json());
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-export function routeNotFound(_req: Request, res: Response, _next: NextFunction) {
+export const routeNotFound = (_req: Request, res: Response, _next: NextFunction) => {
   const error = new Error("Not found");
   logging.warning(error);
 
@@ -9,4 +9,4 @@ export function routeNotFound(_req: Request, res: Response, _next: NextFunction)
       message: error.message,
     },
   });
-}
+};
