@@ -12,13 +12,9 @@ export type TLoginBody = {
   password: string;
 };
 
-export type TPreAuthenticatedRequest = Request & {
-  cookies: {
-    jwt?: string;
-  };
-  user?: TUserTokenData;
-};
-
 export type TAuthenticatedRequest = Request & {
+  cookies: {
+    jwt: string;
+  };
   user: TUserTokenData;
 };

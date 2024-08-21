@@ -6,7 +6,7 @@ import { prisma } from "../../../server";
 import { checkPasswordMatch, checkUserExists, checkUserNotExists } from "../validation/userCheck";
 import { checkRoleExists } from "../validation/roleCheck";
 import { JWT_SECRET_KEY } from "../../../config/config";
-import { TUserTokenData } from "../models/user";
+import { TUserRoles, TUserTokenData } from "../models/user";
 
 export const registerService = async (username: string, password: string, roleId: string) => {
   try {
@@ -36,7 +36,7 @@ export const loginService = async (username: string, password: string) => {
 
     await checkPasswordMatch(password, user.password);
 
-    const userTokenData: TUserTokenData = { uuid: user.uuid, username: user.username, role: user.role.name };
+    const userTokenData: TUserTokenData = { uuid: user.uuid, username: user.username, role: user.role.name as TUserRoles };
 
     const token = jwt.sign(userTokenData, JWT_SECRET_KEY, { expiresIn: "30d" });
 
