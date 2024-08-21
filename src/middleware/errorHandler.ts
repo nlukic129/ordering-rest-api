@@ -9,5 +9,7 @@ export const errorHandler = (err: Err, _req: Request, res: Response, _next: Next
   const errName = err.name;
   const errPlace = err.place;
 
-  return res.status(errStatus).json(new ResponseError(errMsg, errName, errPlace));
+  logging.error({ name: errName, message: errMsg, place: errPlace });
+
+  return res.status(errStatus).json(new ResponseError(errMsg, errName));
 };

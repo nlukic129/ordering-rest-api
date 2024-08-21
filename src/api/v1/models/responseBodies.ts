@@ -14,12 +14,10 @@ export class ResponseError {
   success: boolean;
   message: string;
   name: string;
-  place: string;
 
-  constructor(message: string, name: string, place: string) {
+  constructor(message: string, name: string) {
     this.success = false;
     this.message = message;
     this.name = name;
-    this.place = place;
   }
 }

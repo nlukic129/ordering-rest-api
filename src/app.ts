@@ -15,7 +15,7 @@ app.use(helmet());
 
 app.use(bodyParser.json());
 
-app.use("/api/v1", loggingHandler, v1Router);
+app.use("/api/v1", v1Router);
 
 app.use(routeNotFound);
 
