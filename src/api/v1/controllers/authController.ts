@@ -35,3 +35,13 @@ export const loginController = async (req: Request<{}, {}, TLoginBody>, res: Res
     return next(err);
   }
 };
+
+export const logoutController = async (_req: Request, res: Response, _next: NextFunction) => {
+  res.clearCookie("jwt", {
+    // path: "/",
+    // secure: true,
+    // sameSite: "none",
+  });
+
+  return res.status(200).json(new ResponseSuccess<{}>("User logged out successfully", {}));
+};
