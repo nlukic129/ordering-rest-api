@@ -27,3 +27,36 @@ export const roleIdMessages = {
   "string.guid": "Role ID must be a valid UUID version 4.",
   "any.required": "Role ID is required.",
 };
+
+export const locationNameMessages = {
+  "string.base": "Location name must be a string.",
+  "string.empty": "Location name cannot be empty.",
+  "string.lowercase": "Location name must be lowercase.",
+  "string.min": "Location name must be at least {#limit} characters long.",
+  "string.max": "Location name can be at most {#limit} characters long.",
+  "any.required": "Location name is required.",
+};
+
+export const locationDisplayNameMessages = {
+  "string.base": "Location display name must be a string.",
+  "string.empty": "Location display name cannot be empty.",
+  "string.min": "Location display name must be at least {#limit} characters long.",
+  "string.max": "Location display name can be at most {#limit} characters long.",
+  "any.required": "Location display name is required.",
+};
+
+export const locationCoordinatesMessages = {
+  "object.base": "Coordinates must be an object.",
+  "object.empty": "Coordinates cannot be empty.",
+  "object.required": "Coordinates are required.",
+};
+
+export const xCoordinatesMessages = {
+  "number.base": "X-coordinate must be a number.",
+  "any.required": "X-coordinate is required.",
+};
+
+export const yCoordinatesMessages = {
+  "number.base": "Y-coordinate must be a number.",
+  "any.required": "Y-coordinate is required.",
+};

@@ -18,3 +18,12 @@ export type TAuthenticatedRequest = Request & {
   };
   user: TUserTokenData;
 };
+
+export type TCreateLocationBody = {
+  name: string;
+  displayName: string;
+  coordinates: {
+    x: number;
+    y: number;
+  };
+};

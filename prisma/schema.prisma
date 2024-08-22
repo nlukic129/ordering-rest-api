@@ -45,10 +45,10 @@ model User {
 }
 
 model Location {
-  uuid        String @id @default(uuid())
-  name        String @unique
-  dispay_name String
-  coordinates Json
+  uuid         String @id @default(uuid())
+  name         String @unique
+  display_name String
+  coordinates  Json
 
   // Relations
   users      User[]
