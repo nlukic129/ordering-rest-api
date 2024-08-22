@@ -2,14 +2,22 @@ import request from "supertest";
 import jwt from "jsonwebtoken";
 
 import app from "../../src/app";
+import { prisma } from "../../src/server";
 import { Shutdown } from "../../src/server";
 import { TUserRoles } from "../../src/api/v1/models/user";
 import { JWT_SECRET_KEY } from "../../src/config/config";
+import { registerService } from "../../src/api/v1/services/authServices";
+
+const testUserData = {
+  username: "admin-test",
+  password: "S3cureP@ssword!",
+  role: "",
+};
 
 const generateUserToken = (role: TUserRoles) => {
   const adminUser = {
     uuid: "admin-uuid",
-    username: "admin",
+    username: testUserData.username,
     role: role,
   };
 
@@ -25,9 +33,31 @@ afterAll((done) => {
 });
 
 describe("POST /login", () => {
+  beforeAll(async () => {
+    try {
+      const adminRole = await prisma.role.findFirst({ where: { name: "ADMIN" }, select: { uuid: true } });
+
+      if (adminRole === null) {
+        logging.error('Role "ADMIN" not found, skipping tests.');
+        throw new Error('Role "ADMIN" not found, skipping tests.');
+      }
+
+      await registerService(testUserData.username, testUserData.password, adminRole.uuid);
+    } catch (err) {
+      logging.error("Error during beforeAll setup in POST /login:", err);
+      throw err;
+    }
+  });
+
+  afterAll(async () => {
+    await prisma.user.delete({
+      where: { username: testUserData.username },
+    });
+  });
+
   describe("When user gives correct username and password", () => {
     it("should return 200 and log in", async () => {
-      const response = await request(app).post("/api/v1/auth/login").send({ username: "admin", password: "S3cureP@ssword!" });
+      const response = await request(app).post("/api/v1/auth/login").send({ username: testUserData.username, password: testUserData.password });
 
       expect(response.status).toBe(200);
 
@@ -46,7 +76,7 @@ describe("POST /login", () => {
 
   describe("When user gives invalid username", () => {
     it("should return an invalid username error", async () => {
-      const response = await request(app).post("/api/v1/auth/login").send({ username: "", password: "S3cureP@ssword!" });
+      const response = await request(app).post("/api/v1/auth/login").send({ username: "", password: testUserData.password });
 
       expect(response.status).toBe(400);
 
@@ -63,7 +93,7 @@ describe("POST /login", () => {
 
   describe("When user gives username that not exist", () => {
     it("should return an invalid not existing username error", async () => {
-      const response = await request(app).post("/api/v1/auth/login").send({ username: "incorrectUsername", password: "S3cureP@ssword!" });
+      const response = await request(app).post("/api/v1/auth/login").send({ username: "incorrectUsername", password: testUserData.password });
 
       expect(response.status).toBe(404);
 
@@ -80,7 +110,7 @@ describe("POST /login", () => {
 
   describe("When user gives incorrect password", () => {
     it("should return an invalid password error", async () => {
-      const response = await request(app).post("/api/v1/auth/login").send({ username: "admin", password: "S3cureP@ssword!!" });
+      const response = await request(app).post("/api/v1/auth/login").send({ username: testUserData.username, password: "S3cureP@ssword!!" });
 
       expect(response.status).toBe(401);
 
@@ -102,7 +132,7 @@ describe("POST /login", () => {
       const response = await request(app)
         .post("/api/v1/auth/login")
         .set("Cookie", `jwt=${userToken}`)
-        .send({ username: "admin", password: "S3cureP@ssword!" });
+        .send({ username: testUserData.username, password: testUserData.password });
 
       expect(response.status).toBe(400);
 
@@ -139,23 +169,6 @@ describe("POST /logout", () => {
   });
 
   describe("When user has not valid token", () => {
-    it("should return message that user are not logged in", async () => {
-      const response = await request(app).post("/api/v1/auth/logout");
-
-      console.log(response.body);
-
-      expect(response.status).toBe(401);
-
-      expect(response.body).toHaveProperty("success");
-      expect(response.body.success).toBe(false);
-
-      expect(response.body).toHaveProperty("message");
-      expect(response.body.message).toBe("You must be logged in, please login.");
-
-      expect(response.body).toHaveProperty("name");
-      expect(response.body.name).toBe("Authentication Error");
-    });
-
     it("should return an invalid token error", async () => {
       const response = await request(app).post("/api/v1/auth/logout").set("Cookie", "jwt=invalidToken");
 
@@ -171,4 +184,23 @@ describe("POST /logout", () => {
       expect(response.body.name).toBe("Authentication Error");
     });
   });
+
+  describe("When user is not logged in", () => {
+    it("should return message that user are not logged in", async () => {
+      const response = await request(app).post("/api/v1/auth/logout");
+
+      expect(response.status).toBe(401);
+
+      expect(response.body).toHaveProperty("success");
+      expect(response.body.success).toBe(false);
+
+      expect(response.body).toHaveProperty("message");
+      expect(response.body.message).toBe("You must be logged in, please login.");
+
+      expect(response.body).toHaveProperty("name");
+      expect(response.body.name).toBe("Authentication Error");
+    });
+  });
 });
+
+describe("POST /register", () => {});
