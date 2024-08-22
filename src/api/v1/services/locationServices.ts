@@ -11,10 +11,8 @@ export const createLocationService = async (name: string, displayName: string, c
         name,
         display_name: displayName,
         coordinates: {
-          create: {
-            x: coordinates.x,
-            y: coordinates.y,
-          },
+          x: coordinates.x,
+          y: coordinates.y,
         },
       },
       select: { uuid: true, name: true, display_name: true, coordinates: true },
