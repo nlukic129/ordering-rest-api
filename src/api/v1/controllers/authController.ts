@@ -10,7 +10,7 @@ export const registerController = async (req: Request<{}, {}, TRegisterBody>, re
 
     await registerService(username, password, roleId);
 
-    return res.status(201).json(new ResponseSuccess<{}>("User registered successfully", {}));
+    return res.status(201).json(new ResponseSuccess<{}>("User registered successfully.", {}));
   } catch (err) {
     return next(err);
   }

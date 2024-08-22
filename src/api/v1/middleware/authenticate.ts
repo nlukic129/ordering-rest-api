@@ -22,7 +22,7 @@ export const authenticateToken = (req: Request, _res: Response, next: NextFuncti
 
 export const checkIfLoggedOut = (req: Request, _res: Response, next: NextFunction) => {
   if (checkIsAuthenticatedRequestType(req)) {
-    return next(new Err("You are already logged in", { statusCode: 400, name: "Authentication Error", place: "checkIfLoggedOut" }));
+    return next(new Err("You are already logged in.", { statusCode: 400, name: "Authentication Error", place: "checkIfLoggedOut" }));
   }
 
   next();
