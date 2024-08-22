@@ -43,5 +43,5 @@ export const logoutController = async (_req: Request, res: Response, _next: Next
     // sameSite: "none",
   });
 
-  return res.status(200).json(new ResponseSuccess<{}>("User logged out successfully", {}));
+  return res.status(200).json(new ResponseSuccess<{}>("User logged out successfully.", {}));
 };

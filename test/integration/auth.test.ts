@@ -16,15 +16,15 @@ const generateUserToken = (role: TUserRoles) => {
   return jwt.sign(adminUser, JWT_SECRET_KEY, { expiresIn: "1h" });
 };
 
+beforeAll((done) => {
+  done();
+});
+
+afterAll((done) => {
+  Shutdown(done);
+});
+
 describe("POST /login", () => {
-  beforeAll((done) => {
-    done();
-  });
-
-  afterAll((done) => {
-    Shutdown(done);
-  });
-
   describe("When user gives correct username and password", () => {
     it("should return 200 and log in", async () => {
       const response = await request(app).post("/api/v1/auth/login").send({ username: "admin", password: "S3cureP@ssword!" });
@@ -111,6 +111,61 @@ describe("POST /login", () => {
 
       expect(response.body).toHaveProperty("message");
       expect(response.body.message).toBe("You are already logged in");
+
+      expect(response.body).toHaveProperty("name");
+      expect(response.body.name).toBe("Authentication Error");
+    });
+  });
+});
+
+describe("POST /logout", () => {
+  describe("When user is logged in", () => {
+    const userToken = generateUserToken("ADMIN");
+
+    it("should return 200 and log out", async () => {
+      const response = await request(app).post("/api/v1/auth/logout").set("Cookie", `jwt=${userToken}`);
+
+      expect(response.status).toBe(200);
+
+      expect(response.body).toHaveProperty("success");
+      expect(response.body.success).toBe(true);
+
+      expect(response.body).toHaveProperty("message");
+      expect(response.body.message).toBe("User logged out successfully.");
+
+      expect(response.headers["set-cookie"]).toBeDefined();
+      expect(response.headers["set-cookie"][0]).toContain("jwt=;");
+    });
+  });
+
+  describe("When user has not valid token", () => {
+    it("should return message that user are not logged in", async () => {
+      const response = await request(app).post("/api/v1/auth/logout");
+
+      console.log(response.body);
+
+      expect(response.status).toBe(401);
+
+      expect(response.body).toHaveProperty("success");
+      expect(response.body.success).toBe(false);
+
+      expect(response.body).toHaveProperty("message");
+      expect(response.body.message).toBe("You must be logged in, please login.");
+
+      expect(response.body).toHaveProperty("name");
+      expect(response.body.name).toBe("Authentication Error");
+    });
+
+    it("should return an invalid token error", async () => {
+      const response = await request(app).post("/api/v1/auth/logout").set("Cookie", "jwt=invalidToken");
+
+      expect(response.status).toBe(403);
+
+      expect(response.body).toHaveProperty("success");
+      expect(response.body.success).toBe(false);
+
+      expect(response.body).toHaveProperty("message");
+      expect(response.body.message).toBe("Your token is not valid, please login.");
 
       expect(response.body).toHaveProperty("name");
       expect(response.body.name).toBe("Authentication Error");
