@@ -229,28 +229,77 @@ describe("POST /register", () => {
       await deleteUserData(testUserData.username);
     });
 
-    it("should return 201 and register user", async () => {
-      const managerRole = await getUserRole("MANAGER");
-      const userToken = generateUserToken("ADMIN");
+    describe("When user gives correct data", () => {
+      it("should return 201 and register user", async () => {
+        const managerRole = await getUserRole("MANAGER");
+        const userToken = generateUserToken("ADMIN");
 
-      const response = await request(app).post("/api/v1/auth/register").set("Cookie", `jwt=${userToken}`).send({
-        username: "testUser",
-        password: "S3cureP@ssword!",
-        confirmPassword: "S3cureP@ssword!",
-        roleId: managerRole.uuid,
+        const response = await request(app).post("/api/v1/auth/register").set("Cookie", `jwt=${userToken}`).send({
+          username: "testUser",
+          password: "S3cureP@ssword!",
+          confirmPassword: "S3cureP@ssword!",
+          roleId: managerRole.uuid,
+        });
+
+        expect(response.status).toBe(201);
+
+        expect(response.body).toHaveProperty("success");
+        expect(response.body.success).toBe(true);
+
+        expect(response.body).toHaveProperty("message");
+        expect(response.body.message).toBe("User registered successfully.");
+
+        await deleteUserData("testUser");
+      });
+    });
+
+    describe("When user gives existing username", () => {
+      it("should return an invalid username error", async () => {
+        const managerRole = await getUserRole("MANAGER");
+        const userToken = generateUserToken("ADMIN");
+
+        const response = await request(app).post("/api/v1/auth/register").set("Cookie", `jwt=${userToken}`).send({
+          username: testUserData.username,
+          password: "S3cureP@ssword!",
+          confirmPassword: "S3cureP@ssword!",
+          roleId: managerRole.uuid,
+        });
+
+        expect(response.status).toBe(400);
+
+        expect(response.body).toHaveProperty("success");
+        expect(response.body.success).toBe(false);
+
+        expect(response.body).toHaveProperty("message");
+        expect(response.body.message).toBe("User with this username already exists.");
+
+        expect(response.body).toHaveProperty("name");
+        expect(response.body.name).toBe("Bad Request");
       });
 
-      console.log(response.body);
+      describe("When user gives invalid role", () => {
+        it("should return an invalid role error", async () => {
+          const userToken = generateUserToken("ADMIN");
 
-      expect(response.status).toBe(201);
+          const response = await request(app).post("/api/v1/auth/register").set("Cookie", `jwt=${userToken}`).send({
+            username: "testUser",
+            password: "S3cureP@ssword!",
+            confirmPassword: "S3cureP@ssword!",
+            roleId: "863e9653-eee8-4d33-b4ba-7076f0234b18",
+          });
 
-      expect(response.body).toHaveProperty("success");
-      expect(response.body.success).toBe(true);
+          expect(response.status).toBe(404);
 
-      expect(response.body).toHaveProperty("message");
-      expect(response.body.message).toBe("User registered successfully.");
+          expect(response.body).toHaveProperty("success");
+          expect(response.body.success).toBe(false);
 
-      await deleteUserData("testUser");
+          expect(response.body).toHaveProperty("message");
+          expect(response.body.message).toBe("Role not found.");
+
+          expect(response.body).toHaveProperty("name");
+          expect(response.body.name).toBe("Not Found");
+        });
+      });
     });
   });
 
