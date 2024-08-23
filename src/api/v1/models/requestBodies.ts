@@ -27,3 +27,9 @@ export type TCreateLocationBody = {
     y: number;
   };
 };
+
+export type TCreateTableBody = {
+  name: string;
+  locationId: string;
+  categories: string[];
+};

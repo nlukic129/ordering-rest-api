@@ -60,3 +60,31 @@ export const yCoordinatesMessages = {
   "number.base": "Y-coordinate must be a number.",
   "any.required": "Y-coordinate is required.",
 };
+
+export const tableNameMessages = {
+  "string.base": "Table name must be a string.",
+  "string.empty": "Table name cannot be empty.",
+  "string.min": "Table name must be at least {#limit} characters long.",
+  "string.max": "Table name can be at most {#limit} characters long.",
+  "any.required": "Table name is required.",
+};
+
+export const tableLocationIdMessages = {
+  "string.base": "Location ID must be a string.",
+  "string.empty": "Location ID cannot be empty.",
+  "string.guid": "Location ID must be a valid UUID version 4.",
+  "any.required": "Location ID is required.",
+};
+
+export const tableCategoriesMessages = {
+  "array.base": "Categories must be an array.",
+  "array.empty": "Categories cannot be empty.",
+  "array.required": "Categories are required.",
+};
+
+export const categoryIdMessages = {
+  "string.base": "Category ID must be a string.",
+  "string.empty": "Category ID cannot be empty.",
+  "string.guid": "Category ID must be a valid UUID version 4.",
+  "any.required": "Category ID is required.",
+};

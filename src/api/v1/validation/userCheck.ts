@@ -27,3 +27,11 @@ export const checkPasswordMatch = async (password: string, userPassword: string)
     throw new Err("Invalid password.", { statusCode: 401, name: "Unauthorized", place: "checkPasswordMatch" });
   }
 };
+
+export const checkUserHasLocation = async (userId: string, locationId: string) => {
+  const user = await prisma.user.findUnique({ where: { uuid: userId }, select: { locations: { where: { uuid: locationId } } } });
+
+  if (!user!.locations.find((location) => location.uuid === locationId)) {
+    throw new Err("User does not have access to this location.", { statusCode: 403, name: "Forbidden", place: "checkUserHasLocation" });
+  }
+};
