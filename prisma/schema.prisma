@@ -63,8 +63,9 @@ model Location {
 }
 
 model Table {
-  uuid String @id @default(uuid())
-  name String @unique
+  uuid   String  @id @default(uuid())
+  name   String  @unique
+  isFree Boolean @default(true)
 
   // Relations
   location   Location   @relation(fields: [locationId], references: [uuid])
