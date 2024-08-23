@@ -29,3 +29,23 @@ export const createTableService = async (name: string, locationId: string, categ
     throw new Err("Failed to create table", { statusCode: 500, name: "Database Error", place: "createTableService" });
   }
 };
+
+export const getTablesService = async (locationId: string, user: TUserTokenData) => {
+  try {
+    await checkLocationExistsById(locationId);
+    await checkUserHasLocation(user.uuid, locationId);
+
+    const tables = await prisma.table.findMany({
+      where: {
+        locationId,
+      },
+    });
+
+    return tables;
+  } catch (err) {
+    if (err instanceof Err) {
+      throw err;
+    }
+    throw new Err("Failed to retrieve tables", { statusCode: 500, name: "Database Error", place: "getTablesService" });
+  }
+};

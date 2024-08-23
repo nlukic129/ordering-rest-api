@@ -88,3 +88,10 @@ export const categoryIdMessages = {
   "string.guid": "Category ID must be a valid UUID version 4.",
   "any.required": "Category ID is required.",
 };
+
+export const locationIdMessages = {
+  "string.base": "Location ID must be a string.",
+  "string.empty": "Location ID cannot be empty.",
+  "string.guid": "Location ID must be a valid UUID version 4.",
+  "any.required": "Location ID is required.",
+};
