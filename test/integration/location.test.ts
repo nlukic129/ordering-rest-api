@@ -19,7 +19,7 @@ afterAll((done) => {
   Shutdown(done);
 });
 
-describe("POST /create", () => {
+describe("POST /", () => {
   describe("User with ADMIN role", () => {
     beforeAll(async () => {
       try {
@@ -40,7 +40,7 @@ describe("POST /create", () => {
         const userToken = generateUserToken("ADMIN");
 
         const response = await request(app)
-          .post("/api/v1/location/create")
+          .post("/api/v1/location/")
           .set("Cookie", `jwt=${userToken}`)
           .send({
             name: "location-test",

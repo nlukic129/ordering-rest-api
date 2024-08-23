@@ -95,3 +95,10 @@ export const locationIdMessages = {
   "string.guid": "Location ID must be a valid UUID version 4.",
   "any.required": "Location ID is required.",
 };
+
+export const tableIdMessages = {
+  "string.base": "Table ID must be a string.",
+  "string.empty": "Table ID cannot be empty.",
+  "string.guid": "Table ID must be a valid UUID version 4.",
+  "any.required": "Table ID is required.",
+};

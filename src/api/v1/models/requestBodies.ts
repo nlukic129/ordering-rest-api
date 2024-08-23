@@ -33,3 +33,10 @@ export type TCreateTableBody = {
   locationId: string;
   categories: string[];
 };
+
+export type TEditTableBody = {
+  id: string;
+  name: string;
+  locationId: string;
+  categories: string[];
+};

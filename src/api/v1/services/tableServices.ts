@@ -3,6 +3,7 @@ import { prisma } from "../../../server";
 import { TUserTokenData } from "../models/user";
 import { checkCategoriesExistById } from "../validation/categoryCheck";
 import { checkLocationExistsById } from "../validation/locationCheck";
+import { checkTableExistsById } from "../validation/tableCheck";
 import { checkUserHasLocation } from "../validation/userCheck";
 
 export const createTableService = async (name: string, locationId: string, categories: string[], user: TUserTokenData) => {
@@ -27,6 +28,35 @@ export const createTableService = async (name: string, locationId: string, categ
       throw err;
     }
     throw new Err("Failed to create table", { statusCode: 500, name: "Database Error", place: "createTableService" });
+  }
+};
+
+export const editTableService = async (id: string, name: string, locationId: string, categories: string[], user: TUserTokenData) => {
+  try {
+    await checkLocationExistsById(locationId);
+    await checkCategoriesExistById(categories);
+    await checkUserHasLocation(user.uuid, locationId);
+    await checkTableExistsById(id);
+
+    const table = await prisma.table.update({
+      where: {
+        uuid: id,
+      },
+      data: {
+        name,
+        locationId,
+        categories: {
+          set: categories.map((categoryId) => ({ uuid: categoryId })),
+        },
+      },
+    });
+
+    return table;
+  } catch (err) {
+    if (err instanceof Err) {
+      throw err;
+    }
+    throw new Err("Failed to edit table", { statusCode: 500, name: "Database Error", place: "editTableService" });
   }
 };
 

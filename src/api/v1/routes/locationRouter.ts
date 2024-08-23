@@ -8,6 +8,6 @@ import { createLocationController } from "../controllers/locationController";
 
 const locationRouter = Router();
 
-locationRouter.post("/create", authenticateToken, authorizeRoles(["ADMIN"]), validateRequestBody(createLocationSchema), createLocationController);
+locationRouter.post("/", authenticateToken, authorizeRoles(["ADMIN"]), validateRequestBody(createLocationSchema), createLocationController);
 
 export default locationRouter;

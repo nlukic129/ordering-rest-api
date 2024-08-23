@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
 import Err from "../../../models/Error";
-import { TCreateTableBody } from "../models/requestBodies";
-import { createTableService, getTablesService } from "../services/tableServices";
+import { TCreateTableBody, TEditTableBody } from "../models/requestBodies";
+import { createTableService, editTableService, getTablesService } from "../services/tableServices";
 import { checkIsAuthenticatedRequestType } from "../utils/typeCheck";
 import { ResponseSuccess } from "../models/responseBodies";
 
@@ -19,6 +19,24 @@ export const createTableController = async (req: Request<{}, {}, TCreateTableBod
     const table = await createTableService(name, locationId, categories, user);
 
     return res.status(201).json(new ResponseSuccess<typeof table>("Table created successfully.", table));
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const editTableController = async (req: Request<{}, {}, TEditTableBody>, res: Response, next: NextFunction) => {
+  try {
+    const { id, name, locationId, categories } = req.body;
+
+    if (!checkIsAuthenticatedRequestType(req)) {
+      throw new Err("Your token is not valid, please login.", { statusCode: 403, name: "Authentication Error", place: "editTableController" });
+    }
+
+    const user = req.user;
+
+    const table = await editTableService(id, name, locationId, categories, user);
+
+    return res.status(201).json(new ResponseSuccess<typeof table>("Table edited successfully.", table));
   } catch (err) {
     return next(err);
   }
