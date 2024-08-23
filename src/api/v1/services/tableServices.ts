@@ -79,3 +79,24 @@ export const getTablesService = async (locationId: string, user: TUserTokenData)
     throw new Err("Failed to retrieve tables", { statusCode: 500, name: "Database Error", place: "getTablesService" });
   }
 };
+
+export const deleteTableService = async (tableId: string, locationId: string, user: TUserTokenData) => {
+  try {
+    await checkLocationExistsById(locationId);
+    await checkUserHasLocation(user.uuid, locationId);
+    await checkTableExistsById(tableId);
+
+    const table = await prisma.table.delete({
+      where: {
+        uuid: tableId,
+      },
+    });
+
+    return table;
+  } catch (err) {
+    if (err instanceof Err) {
+      throw err;
+    }
+    throw new Err("Failed to delete table", { statusCode: 500, name: "Database Error", place: "deleteTableService" });
+  }
+};
