@@ -57,3 +57,23 @@ export const createArticleService = async (user: TUserTokenData, articleData: TC
     throw new Err("Filed to create article", { statusCode: 500, name: "Database Error", place: "createArticleService" });
   }
 };
+
+export const getArticlesService = async (locationId: string, user: TUserTokenData) => {
+  try {
+    await checkLocationExistsById(locationId);
+    await checkUserHasLocation(user, locationId);
+
+    const articles = await prisma.article.findMany({
+      where: { locationId },
+      select: { uuid: true, name: true, description: true, price: true, code: true, locationId: true, categories: true, image: true },
+    });
+
+    return articles;
+  } catch (err) {
+    if (err instanceof Err) {
+      throw err;
+    }
+    console.log(err);
+    throw new Err("Filed to get articles", { statusCode: 500, name: "Database Error", place: "getArticlesService" });
+  }
+};
