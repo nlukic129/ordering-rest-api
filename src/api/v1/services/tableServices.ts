@@ -3,14 +3,15 @@ import { prisma } from "../../../server";
 import { TUserTokenData } from "../models/user";
 import { checkCategoriesExistById } from "../validation/categoryCheck";
 import { checkLocationExistsById } from "../validation/locationCheck";
-import { checkTableExistsById } from "../validation/tableCheck";
+import { checkTableExistByName, checkTableExistsById } from "../validation/tableCheck";
 import { checkUserHasLocation } from "../validation/userCheck";
 
 export const createTableService = async (name: string, locationId: string, categories: string[], user: TUserTokenData) => {
   try {
     await checkLocationExistsById(locationId);
     await checkCategoriesExistById(categories);
-    await checkUserHasLocation(user.uuid, locationId);
+    await checkUserHasLocation(user, locationId);
+    await checkTableExistByName(name);
 
     const table = await prisma.table.create({
       data: {
@@ -35,8 +36,9 @@ export const editTableService = async (id: string, name: string, locationId: str
   try {
     await checkLocationExistsById(locationId);
     await checkCategoriesExistById(categories);
-    await checkUserHasLocation(user.uuid, locationId);
+    await checkUserHasLocation(user, locationId);
     await checkTableExistsById(id);
+    await checkTableExistByName(name);
 
     const table = await prisma.table.update({
       where: {
@@ -63,7 +65,7 @@ export const editTableService = async (id: string, name: string, locationId: str
 export const getTablesService = async (locationId: string, user: TUserTokenData) => {
   try {
     await checkLocationExistsById(locationId);
-    await checkUserHasLocation(user.uuid, locationId);
+    await checkUserHasLocation(user, locationId);
 
     const tables = await prisma.table.findMany({
       where: {
@@ -83,7 +85,7 @@ export const getTablesService = async (locationId: string, user: TUserTokenData)
 export const deleteTableService = async (tableId: string, locationId: string, user: TUserTokenData) => {
   try {
     await checkLocationExistsById(locationId);
-    await checkUserHasLocation(user.uuid, locationId);
+    await checkUserHasLocation(user, locationId);
     await checkTableExistsById(tableId);
 
     const table = await prisma.table.delete({

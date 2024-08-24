@@ -10,3 +10,11 @@ export const checkTableExistsById = async (id: string) => {
 
   return table;
 };
+
+export const checkTableExistByName = async (name: string) => {
+  const table = await prisma.table.findUnique({ where: { name } });
+
+  if (table) {
+    throw new Err("Table with this name already exists.", { statusCode: 400, name: "Bad Request", place: "checkTableExistByName" });
+  }
+};

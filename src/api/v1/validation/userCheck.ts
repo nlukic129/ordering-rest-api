@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 
 import Err from "../../../models/Error";
 import { prisma } from "../../../server";
+import { TUserTokenData } from "../models/user";
 
 export const checkUserNotExists = async (username: string) => {
   const user = await prisma.user.findUnique({ where: { username } });
@@ -28,8 +29,14 @@ export const checkPasswordMatch = async (password: string, userPassword: string)
   }
 };
 
-export const checkUserHasLocation = async (userId: string, locationId: string) => {
-  const user = await prisma.user.findUnique({ where: { uuid: userId }, select: { locations: { where: { uuid: locationId } } } });
+export const checkUserHasLocation = async (tokenUser: TUserTokenData, locationId: string) => {
+  const { uuid, role } = tokenUser;
+
+  if (role === "ADMIN") {
+    return;
+  }
+
+  const user = await prisma.user.findUnique({ where: { uuid }, select: { locations: { where: { uuid: locationId } } } });
 
   if (!user!.locations.find((location) => location.uuid === locationId)) {
     throw new Err("User does not have access to this location.", { statusCode: 403, name: "Forbidden", place: "checkUserHasLocation" });

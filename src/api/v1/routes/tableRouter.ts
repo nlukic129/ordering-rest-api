@@ -30,3 +30,5 @@ tableRouter.delete(
   validateRequestParams(deleteTableSchema),
   deleteTableController
 );
+
+export default tableRouter;
