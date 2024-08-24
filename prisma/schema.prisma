@@ -51,10 +51,9 @@ model Location {
   coordinates  Json
 
   // Relations
-  users      User[]
-  tables     Table[]
-  categories Category[]
-  articles   Article[]
+  users    User[]
+  tables   Table[]
+  articles Article[]
 
   // Meta
   createdAt DateTime @default(now())
@@ -85,9 +84,8 @@ model Category {
   name String @unique
 
   // Relations
-  tables    Table[]
-  articles  Article[]
-  locations Location[]
+  tables   Table[]
+  articles Article[]
 
   // Meta
   createdAt DateTime @default(now())
