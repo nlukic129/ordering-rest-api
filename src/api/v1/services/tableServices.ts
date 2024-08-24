@@ -30,11 +30,11 @@ export const createTableService = async (name: string, locationId: string, categ
     });
 
     return table;
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof Err) {
       throw err;
     }
-    throw new Err(err.message, { statusCode: 500, name: "Database Error", place: "createTableService" });
+    throw new Err("Filed to create table", { statusCode: 500, name: "Database Error", place: "createTableService" });
   }
 };
 

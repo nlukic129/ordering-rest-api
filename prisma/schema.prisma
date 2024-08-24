@@ -54,6 +54,7 @@ model Location {
   users      User[]
   tables     Table[]
   categories Category[]
+  articles   Article[]
 
   // Meta
   createdAt DateTime @default(now())
@@ -101,9 +102,11 @@ model Article {
   description String
   price       Float
   image       String
-  code        String
+  code        Int        @unique
   // Relations
-  categoies   Category[]
+  categories  Category[]
+  location    Location   @relation(fields: [locationId], references: [uuid])
+  locationId  String
 
   // Meta
   createdAt DateTime @default(now())

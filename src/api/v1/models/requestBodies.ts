@@ -40,3 +40,12 @@ export type TEditTableBody = {
   locationId: string;
   categories: string[];
 };
+
+export type TCreateArticleBody = {
+  name: string;
+  description: string;
+  price: string;
+  code: string;
+  categories: string[];
+  locationId: string;
+};

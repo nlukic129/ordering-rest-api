@@ -43,7 +43,7 @@ export const editTableController = async (req: Request<{}, {}, TEditTableBody>, 
   }
 };
 
-export const getTablesController = async (req: Request<TGetTablesParams, {}, {}>, res: Response, next: NextFunction) => {
+export const getTablesController = async (req: Request<TGetTablesParams>, res: Response, next: NextFunction) => {
   try {
     const locationId = req.params.locationId;
 
@@ -61,7 +61,7 @@ export const getTablesController = async (req: Request<TGetTablesParams, {}, {}>
   }
 };
 
-export const deleteTableController = async (req: Request<TDeleteTableParams, {}, {}>, res: Response, next: NextFunction) => {
+export const deleteTableController = async (req: Request<TDeleteTableParams>, res: Response, next: NextFunction) => {
   try {
     const tableId = req.params.tableId;
     const locationId = req.params.locationId;
