@@ -72,9 +72,9 @@ export const deleteTableController = async (req: Request<TDeleteTableParams>, re
 
     const user = req.user;
 
-    const table = await deleteTableService(tableId, locationId, user);
+    await deleteTableService(tableId, locationId, user);
 
-    return res.status(200).json(new ResponseSuccess<typeof table>("Table deleted successfully.", table));
+    return res.status(200).json(new ResponseSuccess<{}>("Table deleted successfully.", {}));
   } catch (err) {
     return next(err);
   }

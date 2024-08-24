@@ -8,7 +8,7 @@ import { checkCategoriesExistById } from "../validation/categoryCheck";
 import { checkLocationExistsById } from "../validation/locationCheck";
 import { checkUserHasLocation } from "../validation/userCheck";
 import { getImage, insertImage } from "../s3/s3connection";
-import { checkArticleUniqueNameCode } from "../validation/articleCheck";
+import { checkArticleExistsById, checkArticleUniqueNameCode } from "../validation/articleCheck";
 
 export const createArticleService = async (user: TUserTokenData, articleData: TCreateArticleBody, articleImage: Express.Multer.File) => {
   try {
@@ -75,5 +75,24 @@ export const getArticlesService = async (locationId: string, user: TUserTokenDat
     }
     console.log(err);
     throw new Err("Filed to get articles", { statusCode: 500, name: "Database Error", place: "getArticlesService" });
+  }
+};
+
+export const deleteArticleService = async (locationId: string, articleId: string, user: TUserTokenData) => {
+  try {
+    await checkLocationExistsById(locationId);
+    await checkUserHasLocation(user, locationId);
+    await checkArticleExistsById(articleId);
+
+    await prisma.article.delete({ where: { uuid: articleId } });
+
+    return;
+  } catch (err) {
+    console.log(err);
+    if (err instanceof Err) {
+      throw err;
+    }
+
+    throw new Err("Filed to delete article", { statusCode: 500, name: "Database Error", place: "deleteArticleService" });
   }
 };

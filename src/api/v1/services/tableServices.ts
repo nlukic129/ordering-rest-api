@@ -106,13 +106,11 @@ export const deleteTableService = async (tableId: string, locationId: string, us
     await checkUserHasLocation(user, locationId);
     await checkTableExistsById(tableId);
 
-    const table = await prisma.table.delete({
+    await prisma.table.delete({
       where: {
         uuid: tableId,
       },
     });
-
-    return table;
   } catch (err) {
     if (err instanceof Err) {
       throw err;

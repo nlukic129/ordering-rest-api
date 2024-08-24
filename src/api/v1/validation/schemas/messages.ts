@@ -103,6 +103,13 @@ export const tableIdMessages = {
   "any.required": "Table ID is required.",
 };
 
+export const articleIdMessages = {
+  "string.base": "Article ID must be a string.",
+  "string.empty": "Article ID cannot be empty.",
+  "string.guid": "Article ID must be a valid UUID version 4.",
+  "any.required": "Article ID is required.",
+};
+
 export const articleNameMessages = {
   "string.base": "Article name must be a string.",
   "string.empty": "Article name cannot be empty.",

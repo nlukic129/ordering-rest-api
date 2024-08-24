@@ -8,3 +8,11 @@ export const checkArticleUniqueNameCode = async (name: string, code: number) => 
     throw new Err("Article name or code already exists.", { statusCode: 409, name: "Conflict", place: "checkArticleUniqueNameCode" });
   }
 };
+
+export const checkArticleExistsById = async (articleId: string) => {
+  const article = await prisma.article.findUnique({ where: { uuid: articleId } });
+
+  if (!article) {
+    throw new Err("Article not found.", { statusCode: 404, name: "Not Found", place: "checkArticleExistsById" });
+  }
+};
