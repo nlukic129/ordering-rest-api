@@ -21,14 +21,20 @@ export const createTableService = async (name: string, locationId: string, categ
           connect: categories.map((categoryId) => ({ uuid: categoryId })),
         },
       },
+      select: {
+        uuid: true,
+        name: true,
+        locationId: true,
+        categories: true,
+      },
     });
 
     return table;
-  } catch (err) {
+  } catch (err: any) {
     if (err instanceof Err) {
       throw err;
     }
-    throw new Err("Failed to create table", { statusCode: 500, name: "Database Error", place: "createTableService" });
+    throw new Err(err.message, { statusCode: 500, name: "Database Error", place: "createTableService" });
   }
 };
 
@@ -51,6 +57,12 @@ export const editTableService = async (id: string, name: string, locationId: str
           set: categories.map((categoryId) => ({ uuid: categoryId })),
         },
       },
+      select: {
+        uuid: true,
+        name: true,
+        locationId: true,
+        categories: true,
+      },
     });
 
     return table;
@@ -70,6 +82,12 @@ export const getTablesService = async (locationId: string, user: TUserTokenData)
     const tables = await prisma.table.findMany({
       where: {
         locationId,
+      },
+      select: {
+        uuid: true,
+        name: true,
+        locationId: true,
+        categories: true,
       },
     });
 
