@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Role {
-  uuid String @id @default(cuid())
+  uuid String @id @default(uuid())
   name String @unique
 
   // Relations
@@ -28,7 +28,7 @@ model Role {
 }
 
 model User {
-  uuid     String @id @default(cuid())
+  uuid     String @id @default(uuid())
   username String @unique
   password String
 
@@ -45,14 +45,15 @@ model User {
 }
 
 model Location {
-  uuid        String @id @default(cuid())
-  name        String @unique
-  dispay_name String
-  coordinates Json
+  uuid         String @id @default(uuid())
+  name         String @unique
+  display_name String
+  coordinates  Json
 
   // Relations
-  users  User[]
-  tables Table[]
+  users    User[]
+  tables   Table[]
+  articles Article[]
 
   // Meta
   createdAt DateTime @default(now())
@@ -62,8 +63,9 @@ model Location {
 }
 
 model Table {
-  uuid String @id @default(cuid())
-  name String @unique
+  uuid   String  @id @default(uuid())
+  name   String  @unique
+  isFree Boolean @default(true)
 
   // Relations
   location   Location   @relation(fields: [locationId], references: [uuid])
@@ -78,7 +80,7 @@ model Table {
 }
 
 model Category {
-  uuid String @id @default(cuid())
+  uuid String @id @default(uuid())
   name String @unique
 
   // Relations
@@ -93,14 +95,16 @@ model Category {
 }
 
 model Article {
-  uuid        String @id @default(cuid())
-  name        String @unique
+  uuid        String     @id @default(uuid())
+  name        String     @unique
   description String
   price       Float
   image       String
-
+  code        Int        @unique
   // Relations
-  categoies Category[]
+  categories  Category[]
+  location    Location   @relation(fields: [locationId], references: [uuid])
+  locationId  String
 
   // Meta
   createdAt DateTime @default(now())

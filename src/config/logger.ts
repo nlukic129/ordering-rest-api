@@ -33,7 +33,7 @@ const colors = {
   },
 };
 
-export function getCallingFunction(error: Error) {
+export const getCallingFunction = (error: Error) => {
   try {
     const stack = error.stack;
 
@@ -51,13 +51,13 @@ export function getCallingFunction(error: Error) {
   } catch {
     return "--";
   }
-}
+};
 
-export function log(message?: any, ...optionalParams: any[]) {
+export const log = (message?: any, ...optionalParams: any[]) => {
   if (!TEST) console.log(`[${new Date().toLocaleString()}]`, colors.fg.magenta, "[SERVER-LOG] ", colors.reset, message, ...optionalParams);
-}
+};
 
-export function info(message?: any, ...optionalParams: any[]) {
+export const info = (message?: any, ...optionalParams: any[]) => {
   if (!TEST)
     console.info(
       `[${new Date().toLocaleString()}]`,
@@ -70,9 +70,9 @@ export function info(message?: any, ...optionalParams: any[]) {
       message,
       ...optionalParams
     );
-}
+};
 
-export function warn(message?: any, ...optionalParams: any[]) {
+export const warn = (message?: any, ...optionalParams: any[]) => {
   if (!TEST)
     console.warn(
       `[${new Date().toLocaleString()}]`,
@@ -85,9 +85,9 @@ export function warn(message?: any, ...optionalParams: any[]) {
       message,
       ...optionalParams
     );
-}
+};
 
-export function error(message?: any, ...optionalParams: any[]) {
+export const error = (message?: any, ...optionalParams: any[]) => {
   if (!TEST)
     console.error(
       `[${new Date().toLocaleString()}]`,
@@ -100,7 +100,7 @@ export function error(message?: any, ...optionalParams: any[]) {
       message,
       ...optionalParams
     );
-}
+};
 
 const logging = {
   log,

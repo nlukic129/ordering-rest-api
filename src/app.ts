@@ -1,22 +1,26 @@
 import express from "express";
+import bodyParser from "body-parser";
+import helmet from "helmet";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import v1Router from "./api/v1/v1";
-import { prisma } from "./server";
 import { loggingHandler } from "./middleware/loggingHandler";
 import { routeNotFound } from "./middleware/routeNotFound";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
-app.get("/", loggingHandler, async (req, res) => {
-  res.json("Hello World");
+app.use(cors());
+app.use(helmet());
+app.use(cookieParser());
 
-  const allUsers = await prisma.user.findMany();
+app.use(bodyParser.json());
 
-  console.log(allUsers);
-});
-
-app.use("/api/v1/", loggingHandler, v1Router);
+app.use("/api/v1", v1Router);
 
 app.use(routeNotFound);
+
+app.use(errorHandler);
 
 export default app;
