@@ -49,3 +49,13 @@ export type TCreateArticleBody = {
   categories: string[];
   locationId: string;
 };
+
+export type TEditArticleBody = {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  code: string;
+  categories: string[];
+  locationId: string;
+};

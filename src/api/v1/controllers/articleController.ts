@@ -1,20 +1,25 @@
 import { Request, Response, NextFunction } from "express";
-import { RequestHandler } from "express";
 
 import Err from "../../../models/Error";
-import { TCreateArticleBody } from "../models/requestBodies";
+import { TCreateArticleBody, TEditArticleBody } from "../models/requestBodies";
 import { TUserTokenData } from "../models/user";
-import { createArticleService, deleteArticleService, getArticlesService } from "../services/articleService";
+import { createArticleService, deleteArticleService, editArticleService, getArticlesService } from "../services/articleService";
 import { ResponseSuccess } from "../models/responseBodies";
 import { checkIsAuthenticatedRequestType } from "../utils/typeCheck";
 import { TDeleteArticleParams, TGetArticleParams } from "../models/requestParams";
 
 type TCreateArticlesRequest = Request & {
-  file: Express.Multer.File;
+  file: Express.Multer.File | undefined;
   body: TCreateArticleBody;
   user: TUserTokenData;
 };
-export const createArticleController: RequestHandler = async (req, res, next) => {
+
+type TEditArticlesRequest = Request & {
+  file: Express.Multer.File | undefined;
+  body: TEditArticleBody;
+  user: TUserTokenData;
+};
+export const createArticleController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const customReq = req as TCreateArticlesRequest;
 
@@ -25,6 +30,22 @@ export const createArticleController: RequestHandler = async (req, res, next) =>
     const article = await createArticleService(user, articleData, articleImage);
 
     return res.status(201).json(new ResponseSuccess<typeof article>("Article created successfully.", article));
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const editArticleController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const customReq = req as TEditArticlesRequest;
+
+    const articleData = customReq.body;
+    const articleImage = customReq.file;
+    const user = customReq.user;
+
+    const article = await editArticleService(user, articleData, articleImage);
+
+    return res.status(201).json(new ResponseSuccess<typeof article>("Article edited successfully.", article));
   } catch (err) {
     return next(err);
   }

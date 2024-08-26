@@ -4,7 +4,7 @@ import { authenticateToken } from "../middleware/authenticate";
 import { authorizeRoles } from "../middleware/authorization";
 import { uploadMiddleware } from "../middleware/multerMiddleware";
 import { parseJSON } from "../middleware/parseJSONMiddleware";
-import { createArticleController, deleteArticleController, getArticlesController } from "../controllers/articleController";
+import { createArticleController, deleteArticleController, editArticleController, getArticlesController } from "../controllers/articleController";
 import { validateRequestBody, validateRequestParams } from "../middleware/validationMiddleware";
 import { createArticleSchema } from "../validation/schemas/article/createArticle";
 import { getArticlesSchema } from "../validation/schemas/article/getArticles";
@@ -36,6 +36,16 @@ articleRouter.delete(
   authorizeRoles(["ADMIN", "MANAGER"]),
   validateRequestParams(deleteArticleSchema),
   deleteArticleController
+);
+
+articleRouter.put(
+  "/",
+  authenticateToken,
+  authorizeRoles(["ADMIN", "MANAGER"]),
+  uploadMiddleware,
+  parseJSON,
+  validateRequestParams(createArticleSchema),
+  editArticleController
 );
 
 export default articleRouter;
