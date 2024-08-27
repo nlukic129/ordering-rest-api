@@ -148,3 +148,10 @@ export const articleCategoriesMessages = {
   "array.empty": "Categories cannot be empty.",
   "array.required": "Categories are required.",
 };
+
+export const userIdMessages = {
+  "string.base": "User ID must be a string.",
+  "string.empty": "User ID cannot be empty.",
+  "string.guid": "User ID must be a valid UUID version 4.",
+  "any.required": "User ID is required.",
+};
