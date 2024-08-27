@@ -59,3 +59,8 @@ export type TEditArticleBody = {
   categories: string[];
   locationId: string;
 };
+
+export type TConnectUserBody = {
+  locationId: string;
+  userId: string;
+};

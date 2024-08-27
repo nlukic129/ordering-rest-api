@@ -21,6 +21,16 @@ export const checkUserExists = async (username: string) => {
   return user;
 };
 
+export const checkUserExistsById = async (userId: string) => {
+  const user = await prisma.user.findUnique({ where: { uuid: userId }, include: { role: true, locations: true } });
+
+  if (!user) {
+    throw new Err("User not found.", { statusCode: 404, name: "Not Found", place: "checkUserExistsById" });
+  }
+
+  return user;
+};
+
 export const checkPasswordMatch = async (password: string, userPassword: string) => {
   const passwordMatch = await bcrypt.compare(password, userPassword);
 
